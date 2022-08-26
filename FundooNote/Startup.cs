@@ -1,3 +1,5 @@
+using BusinessLayer.Interfaces;
+using BusinessLayer.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -7,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using RepositoryLayer.Interfaces;
 using RepositoryLayer.Services;
 using System;
 using System.Collections.Generic;
@@ -26,9 +29,12 @@ namespace FundooNote
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
+
         {
             services.AddControllers();
             services.AddDbContext<FundooContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("Fundoo_Notes")));
+            services.AddTransient<IUserRL, UserRL>();
+            services.AddTransient<IUserBL, UserBL>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
