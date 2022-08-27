@@ -8,5 +8,6 @@ namespace BusinessLayer.Interfaces
     public interface IUserBL
     {
         void RegisterUser(UserPostModel userPostModel);
+        public string LoginUser(LoginModel loginModel);
     }
 }
