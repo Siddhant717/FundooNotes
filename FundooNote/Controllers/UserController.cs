@@ -37,8 +37,8 @@ namespace FundooNote.Controllers
         {
             try
             {
-                this.userBL.LoginUser(loginModel);
-                return this.Ok(new { success = true, status = 200, message = $"login successful for {loginModel.EmailId}" });
+                string token = this.userBL.LoginUser(loginModel);
+                return this.Ok(new { Token = token, success = true, status = 200, message = $"login successful for {loginModel.EmailId}" });
             }
             catch (Exception ex)
             {

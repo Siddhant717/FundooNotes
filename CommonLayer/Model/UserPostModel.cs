@@ -8,18 +8,19 @@ namespace CommonLayer.Model
     public class UserPostModel
     {
         [Required]
-        [RegularExpression("^[A-Z]{1}[a-z]{2,}$", ErrorMessage = "First Name Start with cap and has minimum three character")]
+        [RegularExpression("^[A-Z]{1}[a-z]{2,}$", ErrorMessage = "First Name start with cap and should have min three characters")]
         public string FirstName { get; set; }
 
         [Required]
-        [RegularExpression("^[A-Za-z]{3,}$", ErrorMessage = "Last Name has minimum three character")]
+        [RegularExpression("^[A-Z]{1}[a-z]{2,}$", ErrorMessage = "Last Name start with cap and should have min three characters")]
         public string LastName { get; set; }
 
         [Required]
+        [RegularExpression("^([A-Za-z]{3,}([.a-z]*)@[a-z]{2,}[.][a-z]{2,3}([.a-z]*))$", ErrorMessage = "Email is not valid")]
         public string EmailId { get; set; }
 
         [Required]
-        [RegularExpression("(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+=-])[a-zA-Z0-9!@#$%^&*()_+=-]{8,}$", ErrorMessage = "Password is not valid 1.Min 8 Character , 2.Atleast 1 special character[@,#,$],3.Atleast 1 digit[0-9],4.Atleast 1 Capital Letter[A-Z] ")]
+        [RegularExpression("^(?=.*[A-Z])(?=.*[@#$!%^&-+=()])(?=.*[0-9])(?=.*[a-z]).{8,}$", ErrorMessage = "Password that should have min 8 characters with atleast 1 UpperCase,1 Numeric Number & 1 SpecialCharacter ")]
         public string Password { get; set; }
        
     }

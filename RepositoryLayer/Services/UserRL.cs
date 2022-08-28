@@ -13,18 +13,19 @@ namespace RepositoryLayer.Services
 {
     public class UserRL : IUserRL
     {
-        readonly FundooContext funDoNoteContext;
+        readonly FundooContext fundooContext;
         private IConfiguration _config;
-        public UserRL(FundooContext funDoNoteContext)
+        public UserRL(FundooContext fundooContext, IConfiguration Config)
         {
-            this.funDoNoteContext = funDoNoteContext;
+            this.fundooContext = fundooContext;
+            this._config = Config;
         }
 
         public string LoginUser(LoginModel loginModel)
         {
             try
             {
-                var user = funDoNoteContext.Users.Where(x => x.EmailId == loginModel.EmailId && x.Password == loginModel.Password).FirstOrDefault();
+                var user = fundooContext.Users.Where(x => x.EmailId == loginModel.EmailId && x.Password == loginModel.Password).FirstOrDefault();
                 if (user == null)
                 {
                     return null;
@@ -71,8 +72,8 @@ namespace RepositoryLayer.Services
                 user.Password = userPostModel.Password;
                 user.CreatedDate = DateTime.Now;
                 user.ModifiedDate = DateTime.Now;
-                funDoNoteContext.Users.Add(user);
-                funDoNoteContext.SaveChanges();
+                fundooContext.Users.Add(user);
+                fundooContext.SaveChanges();
             }
             catch (Exception ex)
             {

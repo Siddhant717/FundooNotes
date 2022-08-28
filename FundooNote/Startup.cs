@@ -36,7 +36,7 @@ namespace FundooNote
 
         {
             services.AddControllers();
-            services.AddDbContext<FundooContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("Fundoo_Notes")));
+            services.AddDbContext<FundooContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("FundooNotes")));
             //swagger code
             services.AddSwaggerGen(swagger =>
             {
