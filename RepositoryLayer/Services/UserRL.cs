@@ -54,7 +54,7 @@ namespace RepositoryLayer.Services
                     new Claim("Email", emailId),
                     new Claim("UserId",userId.ToString()),
                     }),
-                    Expires= DateTime.UtcNow.AddHours(2),
+                    Expires = DateTime.UtcNow.AddHours(2),
 
                     SigningCredentials =
                 new SigningCredentials(
@@ -104,7 +104,7 @@ namespace RepositoryLayer.Services
 
                 //Setting the QueuPath where we want to store the messages.
                 fundooQ.Path = @".\private$\FundooNote";
-                if(MessageQueue.Exists(fundooQ.Path))
+                if (MessageQueue.Exists(fundooQ.Path))
                 {
 
                     fundooQ = new MessageQueue(@".\private$\FundooNote");
@@ -122,7 +122,7 @@ namespace RepositoryLayer.Services
                 fundooQ.Send(MyMessage);
                 Message msg = fundooQ.Receive();
                 msg.Formatter = new BinaryMessageFormatter();
-                EmailService.SendEmail(emailid, msg.Body.ToString());
+                EmailService.SendEmail(emailid, msg.Body.ToString(),user.FirstName);
                 fundooQ.ReceiveCompleted += new ReceiveCompletedEventHandler(msmqQueue_ReceiveCompleted);
 
                 fundooQ.BeginReceive();
@@ -141,7 +141,7 @@ namespace RepositoryLayer.Services
             {
                 MessageQueue queue = (MessageQueue)sender;
                 Message msg = queue.EndReceive(e.AsyncResult);
-                EmailService.SendEmail(e.Message.ToString(), GenerateToken(e.Message.ToString()));
+                EmailService.SendEmail(e.Message.ToString(), GenerateToken(e.Message.ToString()), e.Message.ToString());
                 queue.BeginReceive();
             }
             catch (MessageQueueException ex)
@@ -174,9 +174,9 @@ namespace RepositoryLayer.Services
                     Subject = new ClaimsIdentity(new Claim[]
                     {
                     new Claim("Email", emailid),
-                 
+
                     }),
-                    Expires= DateTime.UtcNow.AddHours(2),
+                    Expires = DateTime.UtcNow.AddHours(2),
 
                     SigningCredentials =
                      new SigningCredentials(
