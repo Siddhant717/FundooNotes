@@ -45,5 +45,19 @@ namespace FundooNote.Controllers
                 throw ex;
             }
         }
+        [HttpPost("ForgotPassword")]
+        public IActionResult ForgotPassword(string emailid)
+        {
+            try
+            {
+                bool isExist = this.userBL.ForgotPassword(emailid);
+                if (isExist) return Ok(new { success = true, message = $"Reset Link sent to Email : {emailid}" });
+                else return BadRequest(new { success = false, message = $"No user Exist with Email : {emailid}" });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

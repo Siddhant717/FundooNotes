@@ -16,7 +16,7 @@ namespace CommonLayer.Model
         public string LastName { get; set; }
 
         [Required]
-        [RegularExpression("^([A-Za-z]{3,}([.a-z]*)@[a-z]{2,}[.][a-z]{2,3}([.a-z]*))$", ErrorMessage = "Email is not valid")]
+        //[RegularExpression("^([A-Za-z]{3,}([.a-z]*)@[a-z]{2,}[.][a-z]{2,3}([.a-z]*))$", ErrorMessage = "Email is not valid")]
         public string EmailId { get; set; }
 
         [Required]

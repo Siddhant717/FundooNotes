@@ -1,4 +1,5 @@
 ﻿using CommonLayer.Model;
+using Experimental.System.Messaging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using RepositoryLayer.Interfaces;
@@ -7,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 
 namespace RepositoryLayer.Services
@@ -31,7 +33,7 @@ namespace RepositoryLayer.Services
                     return null;
                 }
 
-                return GenerateJwtToken(user.EmailId, user.Password);
+                return GenerateJwtToken(user.EmailId, user.userId);
             }
             catch (Exception ex)
             {
@@ -39,20 +41,28 @@ namespace RepositoryLayer.Services
             }
         }
 
-        private string GenerateJwtToken(string emailId, string password)
+        private string GenerateJwtToken(string emailId, int userId)
         {
             try
             {
-                var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-                var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var tokenKey = Encoding.ASCII.GetBytes("THIS_IS_MY_KEY_TO_GENERATE_TOKEN");
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(new Claim[]
+                    {
+                    new Claim("Email", emailId),
+                    new Claim("UserId",userId.ToString()),
+                    }),
+                    Expires= DateTime.UtcNow.AddHours(2),
 
-                var token = new JwtSecurityToken(_config["Jwt:Issuer"],
-                  _config["Jwt:Issuer"],
-                  null,
-                  expires: DateTime.Now.AddMinutes(120),
-                  signingCredentials: credentials);
-
-                return new JwtSecurityTokenHandler().WriteToken(token);
+                    SigningCredentials =
+                new SigningCredentials(
+                    new SymmetricSecurityKey(tokenKey),
+                    SecurityAlgorithms.HmacSha256Signature),
+                };
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                return tokenHandler.WriteToken(token);
             }
             catch (Exception ex)
             {
@@ -81,6 +91,105 @@ namespace RepositoryLayer.Services
             }
         }
 
+        public bool ForgotPassword(string emailid)
+        {
+            try
+            {
+                var user = fundooContext.Users.Where(x => x.EmailId == emailid).FirstOrDefault();
+                if (user == null)
+                {
+                    return false;
+                }
+                MessageQueue fundooQ = new MessageQueue();
 
+                //Setting the QueuPath where we want to store the messages.
+                fundooQ.Path = @".\private$\FundooNote";
+                if(MessageQueue.Exists(fundooQ.Path))
+                {
+
+                    fundooQ = new MessageQueue(@".\private$\FundooNote");
+                    //Exists
+                }
+                else
+                {
+                    // Creates the new queue named "Bills"
+                    MessageQueue.Create(fundooQ.Path);
+                }
+                Message MyMessage = new Message();
+                MyMessage.Formatter = new BinaryMessageFormatter();
+                MyMessage.Body = GenerateJwtToken(emailid, user.userId);
+                MyMessage.Label = "Forget Password Email";
+                fundooQ.Send(MyMessage);
+                Message msg = fundooQ.Receive();
+                msg.Formatter = new BinaryMessageFormatter();
+                EmailService.SendEmail(emailid, msg.Body.ToString());
+                fundooQ.ReceiveCompleted += new ReceiveCompletedEventHandler(msmqQueue_ReceiveCompleted);
+
+                fundooQ.BeginReceive();
+                fundooQ.Close();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private void msmqQueue_ReceiveCompleted(object sender, ReceiveCompletedEventArgs e)
+        {
+            try
+            {
+                MessageQueue queue = (MessageQueue)sender;
+                Message msg = queue.EndReceive(e.AsyncResult);
+                EmailService.SendEmail(e.Message.ToString(), GenerateToken(e.Message.ToString()));
+                queue.BeginReceive();
+            }
+            catch (MessageQueueException ex)
+
+            {
+
+                if (ex.MessageQueueErrorCode ==
+
+                    MessageQueueErrorCode.AccessDenied)
+
+                {
+
+                    Console.WriteLine("Access is denied. " +
+
+                        "Queue might be a system queue.");
+
+                }
+
+            }
+        }
+
+        private string GenerateToken(string emailid)
+        {
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var tokenKey = Encoding.ASCII.GetBytes("THIS_IS_MY_KEY_TO_GENERATE_TOKEN");
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(new Claim[]
+                    {
+                    new Claim("Email", emailid),
+                 
+                    }),
+                    Expires= DateTime.UtcNow.AddHours(2),
+
+                    SigningCredentials =
+                     new SigningCredentials(
+                    new SymmetricSecurityKey(tokenKey),
+                    SecurityAlgorithms.HmacSha256Signature),
+                };
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                return tokenHandler.WriteToken(token);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
