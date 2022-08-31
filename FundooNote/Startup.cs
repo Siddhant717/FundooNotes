@@ -29,7 +29,7 @@ namespace FundooNote
             Configuration = configuration;
         }
 
-       public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -73,6 +73,8 @@ namespace FundooNote
                     }
                 });
             });
+            //var secret = this.Configuration.GetSection("JwtConfig").GetSection("SecretKey").Value;
+            //var key = Encoding.ASCII.GetBytes(secret);
 
             services.AddAuthentication(option =>
             {
@@ -81,15 +83,22 @@ namespace FundooNote
 
             }).AddJwtBearer(options =>
             {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = false,
+                    //ValidateIssuer = true,
+                    //ValidateAudience = true,
+                    //ValidateLifetime = false,
+                    //ValidateIssuerSigningKey = true,
+                    //ValidIssuer = Configuration["Jwt:Issuer"],
+                    //ValidAudience = Configuration["Jwt:Issuer"],
+                    //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])) //Configuration["JwtToken:SecretKey"]  
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),//Configuration["JwtToken:SecretKey"]
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = Configuration["Jwt:Issuer"],
-                    ValidAudience = Configuration["Jwt:Issuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])) //Configuration["JwtToken:SecretKey"]  
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+
                 };
             });
 

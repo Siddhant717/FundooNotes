@@ -46,13 +46,13 @@ namespace RepositoryLayer.Services
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var tokenKey = Encoding.ASCII.GetBytes("THIS_IS_MY_KEY_TO_GENERATE_TOKEN");
+                var tokenKey = Encoding.ASCII.GetBytes(_config["Jwt:Key"]);
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                     {
                     new Claim("Email", emailId),
-                    new Claim("UserId",userId.ToString()),
+                    new Claim("userId",userId.ToString()),
                     }),
                     Expires = DateTime.UtcNow.AddHours(2),
 
@@ -168,12 +168,12 @@ namespace RepositoryLayer.Services
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var tokenKey = Encoding.ASCII.GetBytes("THIS_IS_MY_KEY_TO_GENERATE_TOKEN");
+                var tokenKey = Encoding.ASCII.GetBytes(_config["Jwt:Key"]);
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                     {
-                    new Claim("Email", emailid),
+                    new Claim("EmailId", emailid),
 
                     }),
                     Expires = DateTime.UtcNow.AddHours(2),
@@ -191,5 +191,25 @@ namespace RepositoryLayer.Services
                 throw ex;
             }
         }
+
+        public bool ResetPassword(string email, PasswordModel passwordModel)
+        {
+            try
+            {
+                var user = fundooContext.Users.Where(x => x.EmailId == email).FirstOrDefault();
+                if (passwordModel.NewPassword != passwordModel.ConfirmNewPassword)
+                {
+                    return false;
+                }
+                user.Password = passwordModel.NewPassword;
+                fundooContext.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
+    
 }
