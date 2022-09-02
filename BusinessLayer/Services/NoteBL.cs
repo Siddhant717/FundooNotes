@@ -27,5 +27,17 @@ namespace BusinessLayer.Services
                 throw ex;
             }
         }
+
+        public void UpdateNote(int userId, int NoteId, UpdateNoteModel updateNoteModel)
+        {
+            try
+            {
+                this.noteRL.UpdateNote( userId, NoteId, updateNoteModel);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

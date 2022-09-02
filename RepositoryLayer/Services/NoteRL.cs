@@ -3,6 +3,7 @@ using RepositoryLayer.Interfaces;
 using RepositoryLayer.Services.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RepositoryLayer.Services
@@ -30,6 +31,28 @@ namespace RepositoryLayer.Services
                 note.ModifiedDate = DateTime.Now;
                 
                 fundooContext.Notes.Add(note);
+                fundooContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public void UpdateNote( int userId, int NoteId, UpdateNoteModel updateNoteModel)
+        {
+            try
+            {
+                var note = fundooContext.Notes.Where(x => x.NoteId == NoteId).FirstOrDefault();
+
+                note.Title = updateNoteModel.Title != "string" ? updateNoteModel.Title : note.Title;
+                note.Description = updateNoteModel.Description != "string" ? updateNoteModel.Description : note.Description;
+                note.Color = updateNoteModel.Color != "string" ? updateNoteModel.Color : note.Color;
+                note.isPin = updateNoteModel.isPin;
+                note.isRemainder = updateNoteModel.isRemainder;
+                note.isArchieve = updateNoteModel.isArchieve;
+                note.isTrash = updateNoteModel.isArchieve;
+                note.Remainder = updateNoteModel.Remainder;
+                note.ModifiedDate = DateTime.Now;
                 fundooContext.SaveChanges();
             }
             catch (Exception ex)
