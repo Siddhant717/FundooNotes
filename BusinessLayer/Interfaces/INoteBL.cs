@@ -10,5 +10,6 @@ namespace BusinessLayer.Interfaces
     {
         void AddNote(int userId, NoteModel noteModel);
         public void UpdateNote(int userId, int NoteId,UpdateNoteModel updateNoteModel);
+        public bool DeleteNote(int userId, int NoteId);
     }
 }

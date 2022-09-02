@@ -28,6 +28,18 @@ namespace BusinessLayer.Services
             }
         }
 
+        public bool DeleteNote(int userId, int NoteId)
+        {
+            try
+            {
+                return this.noteRL.DeleteNote(userId, NoteId);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public void UpdateNote(int userId, int NoteId, UpdateNoteModel updateNoteModel)
         {
             try

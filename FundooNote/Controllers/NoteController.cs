@@ -64,6 +64,29 @@ namespace FundooNote.Controllers
             {
                 throw ex;
             }
+
+        }
+        [Authorize]
+        [HttpDelete("DeleteNote/{NoteId}")]
+        public IActionResult DeleteNote(int NoteId)
+        {
+            try
+            {
+                var note = fundooContext.Notes.Where(x => x.NoteId == NoteId).FirstOrDefault();
+                //Authorization match userId
+                var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
+                int UserID = Int32.Parse(userid.Value);
+                if (note == null)
+                {
+                    return this.BadRequest(new { success = false, message = "Please provide correct note" });
+                }
+                this.noteBL.DeleteNote(UserID, NoteId);
+                return this.Ok(new { success = true, status = 200, message = "Note Deleted successfully" });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
