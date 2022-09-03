@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using RepositoryLayer.Services;
+using RepositoryLayer.Services.Entities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace FundooNote.Controllers
@@ -88,5 +90,69 @@ namespace FundooNote.Controllers
                 throw ex;
             }
         }
+        [Authorize]
+        [HttpGet("GetNote/{NoteId}")]
+        public IActionResult GetNote(int NoteId)
+        {
+            try
+            {
+                var note = fundooContext.Notes.Where(x => x.NoteId == NoteId).FirstOrDefault();
+                //Authorization match userId
+                var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
+                int UserID = Int32.Parse(userid.Value);
+                if (note == null)
+                {
+                    return this.BadRequest(new { success = false, message = "Note not exist" });
+                }
+                Note notes = new Note();
+                notes = this.noteBL.GetNote(UserID, NoteId);
+                return this.Ok(new { success = true, status = 200, note = notes });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [Authorize]
+        [HttpGet("GetAllNote")]
+        public IActionResult GetAllNote()
+        {
+            try
+            {
+
+                //Authorization match userId
+                var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
+                int UserID = Int32.Parse(userid.Value);
+
+                List<Note> notes = new List<Note>();
+                notes = this.noteBL.GetAllNotes(UserID);
+                return this.Ok(new { success = true, status = 200, Allnotes = notes });
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        [Authorize]
+        [HttpGet("GetAllNoteByUsingJoin")]
+        public IActionResult GetAllNotesByUsingJoin()
+        {
+            try
+            {
+
+                //Authorization match userId
+                var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
+                int UserID = Int32.Parse(userid.Value);
+
+                List<NoteResponseModel> notes = new List<NoteResponseModel>();
+                notes = this.noteBL.GetAllNotesByUsingJoin(UserID);
+                return this.Ok(new { success = true, status = 200, Allnotes = notes });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

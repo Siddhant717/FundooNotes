@@ -58,6 +58,62 @@ namespace RepositoryLayer.Services
             }
         }
 
+        public List<Note> GetAllNotes(int userId)
+        {
+            try
+            {
+                var note = fundooContext.Notes.Where(x => x.userId == userId).ToList(); //using LINQ
+                return note;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<NoteResponseModel> GetAllNotesUsingJoin(int userId)
+        {
+            try
+            {
+                //Using LINQ join
+                return fundooContext.Users.Where(u => u.userId == userId)
+                .Join(fundooContext.Notes,
+                u => u.userId,
+                n => n.userId,
+                (u, n) => new NoteResponseModel
+                {
+                    NoteId = n.NoteId,
+                    UserId = u.userId,
+                    Title = n.Title,
+                    Description = n.Description,
+                    Color = n.Color,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Email = u.EmailId
+
+                }).ToList();
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public Note GetNote(int UserId, int NoteId)
+        {
+            try
+            {
+                var note = fundooContext.Notes.Where(x => x.NoteId == NoteId).FirstOrDefault();
+
+                return note;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public void UpdateNote( int userId, int NoteId, UpdateNoteModel updateNoteModel)
         {
             try

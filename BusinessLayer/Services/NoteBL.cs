@@ -40,6 +40,43 @@ namespace BusinessLayer.Services
             }
         }
 
+        public List<Note> GetAllNotes(int userId)
+        {
+            try
+            {
+                return noteRL.GetAllNotes(userId);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<NoteResponseModel> GetAllNotesByUsingJoin(int userId)
+        {
+            try
+            {
+                return noteRL.GetAllNotesUsingJoin(userId);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        public Note GetNote(int userId, int NoteId)
+        {
+            try
+            {
+                return noteRL.GetNote(userId, NoteId);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public void UpdateNote(int userId, int NoteId, UpdateNoteModel updateNoteModel)
         {
             try

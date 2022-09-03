@@ -112,7 +112,7 @@ namespace RepositoryLayer.Services
                 }
                 else
                 {
-                    // Creates the new queue named "Bills"
+                    // Creates the new queue 
                     MessageQueue.Create(fundooQ.Path);
                 }
                 Message MyMessage = new Message();
