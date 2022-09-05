@@ -139,6 +139,16 @@ namespace BusinessLayer.Services
             }
         }
 
-        
+        public async Task<bool> DeleteReminder(int userId, int NoteId)
+        {
+            try
+            {
+                return await noteRL.DeleteReminder(userId, NoteId);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
