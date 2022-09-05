@@ -16,6 +16,7 @@ namespace BusinessLayer.Interfaces
         public List<Note> GetAllNotes(int userId);
         public List<NoteResponseModel> GetAllNotesByUsingJoin(int UserId);
         Task<bool> ArchieveNote(int userId, int NoteId);
+        Task<bool> PinNote(int userId, int NoteId);
 
     }
 }

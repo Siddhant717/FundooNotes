@@ -158,7 +158,36 @@ namespace RepositoryLayer.Services
                 {
                     note.isArchieve = false;
                 }
-                note.isArchieve = true;
+                else
+                {
+                    note.isArchieve = true;
+                }
+               
+                await fundooContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<bool> PinNote(int userId, int NoteId)
+        {
+            try
+            {
+
+                var note = await fundooContext.Notes.Where(x => x.NoteId == NoteId).FirstOrDefaultAsync();
+                if (note == null || note.isTrash == true)
+                {
+                    return false;
+                }
+
+                if (note.isPin == true)
+                {
+                    note.isPin = false;
+                }
+                else { note.isPin = true; }
                 await fundooContext.SaveChangesAsync();
                 return true;
             }
