@@ -20,5 +20,6 @@ namespace RepositoryLayer.Interfaces
         Task<bool> TrashNote(int userId, int NoteId);
         Task<bool> ReminderNote(int userId, int NoteId, DateTime reminder);
         Task<bool> DeleteReminder(int UserId, int NoteId);
+        Task UpdateColor(int userId, int NoteId, string Color);
     }
 }
