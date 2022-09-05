@@ -3,6 +3,7 @@ using RepositoryLayer.Services.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BusinessLayer.Interfaces
 {
@@ -14,5 +15,7 @@ namespace BusinessLayer.Interfaces
         public Note GetNote(int userId, int NoteId);
         public List<Note> GetAllNotes(int userId);
         public List<NoteResponseModel> GetAllNotesByUsingJoin(int UserId);
+        Task<bool> ArchieveNote(int userId, int NoteId);
+
     }
 }

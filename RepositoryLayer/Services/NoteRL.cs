@@ -1,10 +1,12 @@
 ﻿using CommonLayer.Model;
+using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.Interfaces;
 using RepositoryLayer.Services.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RepositoryLayer.Services
 {
@@ -38,6 +40,8 @@ namespace RepositoryLayer.Services
                 throw ex;
             }
         }
+
+        
 
         public bool DeleteNote(int userId, int NoteId)
         {
@@ -119,17 +123,44 @@ namespace RepositoryLayer.Services
             try
             {
                 var note = fundooContext.Notes.Where(x => x.NoteId == NoteId).FirstOrDefault();
-
-                note.Title = updateNoteModel.Title != "string" ? updateNoteModel.Title : note.Title;
-                note.Description = updateNoteModel.Description != "string" ? updateNoteModel.Description : note.Description;
-                note.Color = updateNoteModel.Color != "string" ? updateNoteModel.Color : note.Color;
-                note.isPin = updateNoteModel.isPin;
-                note.isRemainder = updateNoteModel.isRemainder;
-                note.isArchieve = updateNoteModel.isArchieve;
-                note.isTrash = updateNoteModel.isArchieve;
-                note.Remainder = updateNoteModel.Remainder;
-                note.ModifiedDate = DateTime.Now;
+                if (note != null || note.isTrash == false)
+                {
+                    note.Title = updateNoteModel.Title != "string" ? updateNoteModel.Title : note.Title;
+                    note.Description = updateNoteModel.Description != "string" ? updateNoteModel.Description : note.Description;
+                    note.Color = updateNoteModel.Color != "string" ? updateNoteModel.Color : note.Color;
+                    note.isPin = updateNoteModel.isPin;
+                    note.isRemainder = updateNoteModel.isRemainder;
+                    note.isArchieve = updateNoteModel.isArchieve;
+                    note.isTrash = updateNoteModel.isArchieve;
+                    note.Remainder = updateNoteModel.Remainder;
+                    note.ModifiedDate = DateTime.Now;
+                   
+                }
                 fundooContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<bool> ArchieveNote(int userId, int NoteId)
+        {
+            try
+            {
+
+                var note = await fundooContext.Notes.Where(x => x.NoteId == NoteId).FirstOrDefaultAsync();
+                if (note == null || note.isTrash == true)
+                {
+                    return false;
+                }
+
+                if (note.isArchieve == true)
+                {
+                    note.isArchieve = false;
+                }
+                note.isArchieve = true;
+                await fundooContext.SaveChangesAsync();
+                return true;
             }
             catch (Exception ex)
             {

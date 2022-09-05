@@ -5,6 +5,7 @@ using RepositoryLayer.Services.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BusinessLayer.Services
 {
@@ -27,6 +28,8 @@ namespace BusinessLayer.Services
                 throw ex;
             }
         }
+
+        
 
         public bool DeleteNote(int userId, int NoteId)
         {
@@ -82,6 +85,17 @@ namespace BusinessLayer.Services
             try
             {
                 this.noteRL.UpdateNote( userId, NoteId, updateNoteModel);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<bool> ArchieveNote(int userId, int NoteId)
+        {
+            try
+            {
+                return await this.noteRL.ArchieveNote(userId, NoteId);
             }
             catch (Exception ex)
             {
