@@ -14,10 +14,12 @@ namespace BusinessLayer.Interfaces
         public bool DeleteNote(int userId, int NoteId);
         public Note GetNote(int userId, int NoteId);
         public List<Note> GetAllNotes(int userId);
-        public List<NoteResponseModel> GetAllNotesByUsingJoin(int UserId);
+        public List<NoteResponseModel> GetAllNotesByUsingJoin(int userId);
         Task<bool> ArchieveNote(int userId, int NoteId);
         Task<bool> PinNote(int userId, int NoteId);
         Task<bool> TrashNote(int userId, int NoteId);
+        Task<bool> ReminderNote(int userId, int NoteId, DateTime reminder);
+      
 
     }
 }
