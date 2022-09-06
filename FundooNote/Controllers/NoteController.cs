@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using RepositoryLayer.Services;
 using RepositoryLayer.Services.Entities;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -288,6 +289,26 @@ namespace FundooNote.Controllers
                 int UserID = Int32.Parse(userid.Value);
                 await this.noteBL.UpdateColor(UserID, NoteId, color);
                 return this.Ok(new { success = true, status = 200, message = "Color updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [Authorize]
+        [HttpGet("GetAllColor")]
+        public IActionResult GetAllColor()
+        {
+            try
+            {
+
+                //Authorization match userId
+                var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
+                int UserID = Int32.Parse(userid.Value);
+
+                List<GetColor> note = new List<GetColor>();
+                note = this.noteBL.GetAllColor(UserID);
+                return this.Ok(new { success = true, status = 200, noteList = note });
             }
             catch (Exception ex)
             {

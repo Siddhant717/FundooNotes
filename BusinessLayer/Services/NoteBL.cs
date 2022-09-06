@@ -162,5 +162,17 @@ namespace BusinessLayer.Services
                 throw ex;
             }
         }
+
+        public List<GetColor> GetAllColor(int userId)
+        {
+            try
+            {
+                return noteRL.GetAllColor(userId);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

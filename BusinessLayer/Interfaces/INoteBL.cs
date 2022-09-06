@@ -21,6 +21,8 @@ namespace BusinessLayer.Interfaces
         Task<bool> ReminderNote(int userId, int NoteId, DateTime reminder);
         Task<bool> DeleteReminder(int userId, int NoteId);
         Task UpdateColor(int userId, int NoteId, string Color);
+        public List<GetColor> GetAllColor(int userId);
+
 
 
     }

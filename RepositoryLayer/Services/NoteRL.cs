@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.Interfaces;
 using RepositoryLayer.Services.Entities;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -267,7 +268,7 @@ namespace RepositoryLayer.Services
             try
             {
                 var note = await fundooContext.Notes.Where(x => x.NoteId == NoteId).FirstOrDefaultAsync();
-                if (note != null || note.isTrash != true)
+                if (note != null && note.isTrash != true)
                 {
                     note.Color = Color;
                 }
@@ -280,5 +281,26 @@ namespace RepositoryLayer.Services
             }
         }
 
+        public List<GetColor> GetAllColor(int userId)
+        {
+            try
+            {
+                return fundooContext.Users.Where(u => u.userId == userId)
+                .Join(fundooContext.Notes,
+                u => u.userId,
+                n => n.userId,
+                (u, n) => new GetColor
+                {
+                    Color = n.Color
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
+    
+    
 }
