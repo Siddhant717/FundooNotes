@@ -106,6 +106,9 @@ namespace FundooNote
             services.AddTransient<IUserBL, UserBL>();
             services.AddTransient<INoteRL, NoteRL>();
             services.AddTransient<INoteBL, NoteBL>();
+            services.AddTransient<ILabelBL,LabelBL>();
+            services.AddTransient<ILabelRL, LabelRL>();
+
 
 
         }
