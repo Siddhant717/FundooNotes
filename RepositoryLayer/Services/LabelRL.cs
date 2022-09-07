@@ -41,6 +41,8 @@ namespace RepositoryLayer.Services
             }
         }
 
+        
+
         public async Task<Label> GetLabelByNoteId(int userId, int NoteId)
         {
             try
@@ -144,7 +146,29 @@ namespace RepositoryLayer.Services
                 throw ex;
             }
         }
+        public async Task<bool> DeleteLabel(int userId, int NoteId)
+        {
+            try
+            {
+                
+                var label = await this.fundooContext.Labels.Where(x => x.NoteId == NoteId && x.userId == userId).FirstOrDefaultAsync();
+                if (label!=null)
+                {
+                    fundooContext.Labels.Remove(label);
+                }
+                await fundooContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
     }
 
-
 }
+
+
+

@@ -29,6 +29,8 @@ namespace BusinessLayer.Services
             }
         }
 
+        
+
         public async Task<Label> GetLabelByNoteId(int userId, int NoteId)
         {
             try
@@ -76,5 +78,17 @@ namespace BusinessLayer.Services
                 throw ex;
             }
         }
+        public async Task<bool> DeleteLabel(int userId, int NoteId)
+        {
+            try
+            {
+                return await this.labelRL.DeleteLabel(userId, NoteId);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }
