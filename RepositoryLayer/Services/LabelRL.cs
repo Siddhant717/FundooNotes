@@ -33,7 +33,7 @@ namespace RepositoryLayer.Services
                 label.NoteId = NoteId;
                 label.LabelName = labelName;
                 fundooContext.Labels.Add(label);
-               await fundooContext.SaveChangesAsync();
+                await fundooContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -71,24 +71,24 @@ namespace RepositoryLayer.Services
             {
                 var label = await this.fundooContext.Labels.FirstOrDefaultAsync(x => x.userId == userId);
                 var result = await (from user in fundooContext.Users
-                              join notes in fundooContext.Notes on user.userId equals userId //where notes.NoteId == NoteId
-                              join labels in fundooContext.Labels on notes.NoteId equals labels.NoteId
-                              where labels.NoteId == NoteId && labels.userId == userId
-                              select new GetLabelModel
-                              {
+                                    join notes in fundooContext.Notes on user.userId equals userId //where notes.NoteId == NoteId
+                                    join labels in fundooContext.Labels on notes.NoteId equals labels.NoteId
+                                    where labels.NoteId == NoteId && labels.userId == userId
+                                    select new GetLabelModel
+                                    {
 
-                                  userId = userId,
-                                  NoteId = notes.NoteId,
-                                  Title = notes.Title,
-                                  FirstName = user.FirstName,
-                                  LastName = user.LastName,
-                                  EmailId = user.EmailId,
-                                  Description = notes.Description,
-                                  Color = notes.Color,
-                                  LabelName = labels.LabelName,
-                                  CreatedDate = labels.user.CreatedDate
-                              }).ToListAsync();
-                return  result;
+                                        userId = userId,
+                                        NoteId = notes.NoteId,
+                                        Title = notes.Title,
+                                        FirstName = user.FirstName,
+                                        LastName = user.LastName,
+                                        EmailId = user.EmailId,
+                                        Description = notes.Description,
+                                        Color = notes.Color,
+                                        LabelName = labels.LabelName,
+                                        CreatedDate = labels.user.CreatedDate
+                                    }).ToListAsync();
+                return result;
             }
             catch (Exception ex)
             {
@@ -101,25 +101,43 @@ namespace RepositoryLayer.Services
             try
             {
                 var label = this.fundooContext.Labels.FirstOrDefaultAsync(x => x.userId == userId);
-                var result =await (from user in fundooContext.Users
-                              join notes in fundooContext.Notes on user.userId equals userId //where notes.NoteId == NoteId
-                              join labels in fundooContext.Labels on notes.NoteId equals labels.NoteId
-                              where labels.userId == userId
-                              select new GetLabelModel
-                              {
+                var result = await (from user in fundooContext.Users
+                                    join notes in fundooContext.Notes on user.userId equals userId //where notes.NoteId == NoteId
+                                    join labels in fundooContext.Labels on notes.NoteId equals labels.NoteId
+                                    where labels.userId == userId
+                                    select new GetLabelModel
+                                    {
 
-                                  userId = userId,
-                                  NoteId = notes.NoteId,
-                                  Title = notes.Title,
-                                  FirstName = user.FirstName,
-                                  LastName = user.LastName,
-                                  EmailId = user.EmailId,
-                                  Description = notes.Description,
-                                  Color = notes.Color,
-                                  LabelName = labels.LabelName,
-                                  CreatedDate = labels.user.CreatedDate
-                              }).ToListAsync();
-                return  result;
+                                        userId = userId,
+                                        NoteId = notes.NoteId,
+                                        Title = notes.Title,
+                                        FirstName = user.FirstName,
+                                        LastName = user.LastName,
+                                        EmailId = user.EmailId,
+                                        Description = notes.Description,
+                                        Color = notes.Color,
+                                        LabelName = labels.LabelName,
+                                        CreatedDate = labels.user.CreatedDate
+                                    }).ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task UpdateLabel(int userId, int NoteId, string newLabel)
+        {
+            try
+            {
+
+                var label = await this.fundooContext.Labels.Where(x => x.NoteId == NoteId && x.userId == userId).FirstOrDefaultAsync();
+                if (label != null)
+                {
+                    label.LabelName = newLabel;
+                }
+                await fundooContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -127,5 +145,6 @@ namespace RepositoryLayer.Services
             }
         }
     }
-    
+
+
 }
