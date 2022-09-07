@@ -24,6 +24,7 @@ namespace RepositoryLayer.Services
         {
             try
             {
+
                 Note note = new Note();
                 note.userId = userId;
                 note.Title = noteModel.Title;
