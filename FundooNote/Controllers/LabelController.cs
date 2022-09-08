@@ -89,7 +89,7 @@ namespace FundooNote.Controllers
             var labelNote = await fundooContext.Labels.Where(x => x.NoteId == NoteId).FirstOrDefaultAsync();
             if (labelNote == null)
             {
-                return this.BadRequest(new { success = false, status = 400, message = "Note doesn't exist " });
+                return this.BadRequest(new { success = false, status = 400, message = "There is no Label created for this NoteId" });
             }
             var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
             int UserID = Int32.Parse(userid.Value);
@@ -104,7 +104,7 @@ namespace FundooNote.Controllers
             var labelNote = await fundooContext.Labels.Where(x => x.NoteId == NoteId).FirstOrDefaultAsync();
             if (labelNote == null)
             {
-                return this.BadRequest(new { success = false, status = 400, message = "There is no Label created for this NoteId " });
+                return this.BadRequest(new { success = false, status = 400, message = "There is no Label created for this NoteId" });
             }
             var userid = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("userId", StringComparison.InvariantCultureIgnoreCase));
             int UserID = Int32.Parse(userid.Value);

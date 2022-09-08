@@ -36,6 +36,7 @@ namespace FundooNote
 
         {
             services.AddControllers();
+            services.AddMemoryCache();
             services.AddDbContext<FundooContext>(opts => opts.UseSqlServer(Configuration.GetConnectionString("FundooNotes")));
             //swagger code
             services.AddSwaggerGen(swagger =>
@@ -108,7 +109,12 @@ namespace FundooNote
             services.AddTransient<INoteBL, NoteBL>();
             services.AddTransient<ILabelRL, LabelRL>();
             services.AddTransient<ILabelBL,LabelBL>();
-           
+            services.AddDistributedRedisCache(
+               options =>
+               {
+                   options.Configuration = "Localhost:6379";
+               }
+               );
 
 
 
