@@ -109,6 +109,8 @@ namespace FundooNote
             services.AddTransient<INoteBL, NoteBL>();
             services.AddTransient<ILabelRL, LabelRL>();
             services.AddTransient<ILabelBL,LabelBL>();
+            services.AddTransient<ICollaboratorRL, CollaboratorRL>();
+            services.AddTransient<ICollaboratorBL, CollaboratorBL>();
             services.AddDistributedRedisCache(
                options =>
                {

@@ -52,7 +52,7 @@ namespace FundooNote.Controllers
                 throw ex;
             }
         }
-        [HttpPost("ForgotPassword")]
+        [HttpPost("ForgotPassword/{emailid}")]
         public IActionResult ForgotPassword(string emailid)
         {
             try

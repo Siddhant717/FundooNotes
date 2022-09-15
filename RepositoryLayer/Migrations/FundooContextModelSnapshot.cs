@@ -19,6 +19,31 @@ namespace RepositoryLayer.Migrations
                 .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("RepositoryLayer.Services.Entities.Collaborator", b =>
+                {
+                    b.Property<int>("CollabId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CollabEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NoteId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("userId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CollabId");
+
+                    b.HasIndex("NoteId");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("Collaborators");
+                });
+
             modelBuilder.Entity("RepositoryLayer.Services.Entities.Label", b =>
                 {
                     b.Property<int>("userId")
@@ -116,6 +141,25 @@ namespace RepositoryLayer.Migrations
                         .HasFilter("[EmailId] IS NOT NULL");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("RepositoryLayer.Services.Entities.Collaborator", b =>
+                {
+                    b.HasOne("RepositoryLayer.Services.Entities.Note", "Note")
+                        .WithMany()
+                        .HasForeignKey("NoteId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RepositoryLayer.Services.Entities.User", "user")
+                        .WithMany()
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Note");
+
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("RepositoryLayer.Services.Entities.Label", b =>

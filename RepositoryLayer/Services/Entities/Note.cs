@@ -22,6 +22,7 @@ namespace RepositoryLayer.Services.Entities
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
 
+
         [ForeignKey(nameof(User))]
         public int userId { get; set; }
         public User user { get; set; }

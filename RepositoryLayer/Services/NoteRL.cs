@@ -159,6 +159,7 @@ namespace RepositoryLayer.Services
                 if (note.isArchieve == true)
                 {
                     note.isArchieve = false;
+                    
                 }
                 else
                 {

@@ -1,11 +1,17 @@
 ﻿using BusinessLayer.Interfaces;
+using CommonLayer.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using RepositoryLayer.Services;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace FundooNote.Controllers
@@ -18,11 +24,14 @@ namespace FundooNote.Controllers
 
         private IConfiguration _config;
         private FundooContext fundooContext;
+       
         public LabelController(ILabelBL labelBL, IConfiguration config, FundooContext fundooContext)
         {
             this.labelBL = labelBL;
             this._config = config;
             this.fundooContext = fundooContext;
+            
+
         }
         [Authorize]
         [HttpPost("AddLabel/{NoteId}/{labelName}")]
@@ -112,6 +121,7 @@ namespace FundooNote.Controllers
             await this.labelBL.DeleteLabel(UserID, NoteId);
             return this.Ok(new { success = true, status = 200, message = "Label Deleted successfully" });
         }
+        
     }
 }
 

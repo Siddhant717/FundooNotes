@@ -14,6 +14,9 @@ namespace RepositoryLayer.Services
         public DbSet<User> Users { get; set; }
         public DbSet<Note> Notes { get; set; }
         public DbSet<Label> Labels { get; set; }
+       public DbSet<Collaborator> Collaborators { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
@@ -30,6 +33,17 @@ namespace RepositoryLayer.Services
             .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Label>()
+            .HasOne(n => n.Note)
+            .WithMany()
+            .HasForeignKey(n => n.NoteId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Collaborator>()
+           .HasOne(u => u.user).WithMany()
+           .HasForeignKey(u => u.userId)
+           .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Collaborator>()
             .HasOne(n => n.Note)
             .WithMany()
             .HasForeignKey(n => n.NoteId)
