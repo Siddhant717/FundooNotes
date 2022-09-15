@@ -12,7 +12,7 @@ namespace RepositoryLayer.Services
 {
     public class CollaboratorRL : ICollaboratorRL
     {
-      readonly FundooContext fundooContext;
+        readonly FundooContext fundooContext;
         private IConfiguration _config;
         public CollaboratorRL(FundooContext fundooContext, IConfiguration config)
         {
@@ -33,7 +33,7 @@ namespace RepositoryLayer.Services
                 collaborator.userId = userId;
                 collaborator.NoteId = NoteId;
                 collaborator.CollabEmail = emailid;
-                 fundooContext.Add(collaborator);
+                fundooContext.Add(collaborator);
                 await fundooContext.SaveChangesAsync();
                 return collaborator;
 
@@ -49,7 +49,7 @@ namespace RepositoryLayer.Services
             try
             {
                 var collab = await fundooContext.Collaborators.Where(x => x.userId == userId && x.NoteId == NoteId).Include(x => x.Note).Include(x => x.user).ToListAsync();
-               
+
                 return collab;
             }
             catch (Exception ex)
@@ -63,7 +63,7 @@ namespace RepositoryLayer.Services
             try
             {
                 var collab = await fundooContext.Collaborators.Where(x => x.userId == userId).Include(x => x.user).Include(x => x.Note).ToListAsync();
-                
+
                 return collab;
             }
             catch (Exception e)
@@ -72,5 +72,5 @@ namespace RepositoryLayer.Services
             }
         }
     }
-    
+
 }

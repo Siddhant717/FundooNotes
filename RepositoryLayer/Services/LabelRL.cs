@@ -41,7 +41,7 @@ namespace RepositoryLayer.Services
             }
         }
 
-        
+
 
         public async Task<Label> GetLabelByNoteId(int userId, int NoteId)
         {
@@ -121,9 +121,9 @@ namespace RepositoryLayer.Services
                                         LabelName = labels.LabelName,
                                         CreatedDate = labels.user.CreatedDate
                                     }).ToListAsync();
-                
-                
-                
+
+
+
                 return result;
             }
             catch (Exception ex)
@@ -153,9 +153,9 @@ namespace RepositoryLayer.Services
         {
             try
             {
-                
+
                 var label = await this.fundooContext.Labels.Where(x => x.NoteId == NoteId && x.userId == userId).FirstOrDefaultAsync();
-                if (label!=null)
+                if (label != null)
                 {
                     fundooContext.Labels.Remove(label);
                 }
