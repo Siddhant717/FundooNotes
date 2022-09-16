@@ -76,7 +76,7 @@ namespace RepositoryLayer.Services
         {
             try
             {
-                var collab = fundooContext.Collaborators.Where(x => x.CollabId == collabId && x.userId==userId && x.NoteId == NoteId ).FirstOrDefault();
+                var collab = fundooContext.Collaborators.Where(x => x.CollabId == collabId && x.userId == userId && x.NoteId == NoteId).FirstOrDefault();
                 if (collab == null)
                 {
                     return false;
