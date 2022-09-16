@@ -11,5 +11,6 @@ namespace BusinessLayer.Interfaces
         Task<Collaborator> AddCollaborator(int userId, int NoteId, string emailid);
         Task<List<Collaborator>> GetCollaboratorByUserId(int userId);
         Task<List<Collaborator>> GetCollaboratorByNoteId(int userId, int NoteId);
+        Task<bool> RemoveCollaborator(int userId, int NoteId, int collabId);
     }
 }

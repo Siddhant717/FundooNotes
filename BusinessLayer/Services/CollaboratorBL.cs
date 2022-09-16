@@ -50,5 +50,17 @@ namespace BusinessLayer.Services
                 throw ex;
             }
         }
+
+        public async Task<bool> RemoveCollaborator(int userId, int NoteId, int collabId)
+        {
+            try
+            {
+                return await collaboratorRL.RemoveCollaborator(userId, NoteId, collabId);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

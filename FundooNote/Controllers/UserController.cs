@@ -3,6 +3,7 @@ using CommonLayer.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using RepositoryLayer.Services;
 using System;
 using System.Collections.Generic;
@@ -18,11 +19,13 @@ namespace FundooNote.Controllers
         IUserBL userBL;
         private IConfiguration _config;
         private FundooContext fundooContext;
-        public UserController(IUserBL userBL, IConfiguration config, FundooContext fundooContext)
+        private readonly ILogger<UserController> logger;
+        public UserController(IUserBL userBL, IConfiguration config, FundooContext fundooContext, ILogger<UserController> logger)
         {
             this.userBL = userBL;
             this._config = config;
             this.fundooContext = fundooContext;
+            this.logger = logger;
 
         }
 
@@ -32,6 +35,7 @@ namespace FundooNote.Controllers
             try
             {
                 this.userBL.RegisterUser(userPostModel);
+                this.logger.LogInformation("New user registered successfully with emailId:" + userPostModel.EmailId);
                 return this.Ok(new { sucess = true, status = 200, message = $"Registration sucessful for {userPostModel.EmailId}" });
             }
             catch (Exception ex)

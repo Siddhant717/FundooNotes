@@ -71,6 +71,25 @@ namespace RepositoryLayer.Services
                 throw e;
             }
         }
+
+        public async Task<bool> RemoveCollaborator(int userId, int NoteId, int collabId)
+        {
+            try
+            {
+                var collab = fundooContext.Collaborators.Where(x => x.CollabId == collabId && x.userId==userId && x.NoteId == NoteId ).FirstOrDefault();
+                if (collab == null)
+                {
+                    return false;
+                }
+                fundooContext.Collaborators.Remove(collab);
+                await fundooContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 
 }
